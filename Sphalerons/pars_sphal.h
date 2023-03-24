@@ -4,7 +4,7 @@ int Nt, S(0.), NCool(20.), beta, trash(0.);
 double Estar;
 double dLim(0.), uLim(0.), apar(0.);
 Real sigma;
- 
+// 
 void parameters(int argc, char *argv[]){
   while( argc > 1 ) {
     
