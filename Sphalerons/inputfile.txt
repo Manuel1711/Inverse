@@ -1,0 +1,89 @@
+@Continuum
+HIDDEN
+#Ncool
+0
+#Ls
+0
+#Numero di punti
+7
+#Nt
+1
+#Omega
+0
+#Lside
+100.89
+#Rside
+50.89
+# Trash = indica quanti punti butto nei miei dati
+0
+#sigma
+1.75
+#apar
+1.999
+HIDDEN
+@
+@
+@
+@
+@
+HIDDEN
+@RETICOLO LS60NT20		
+#Ls
+60
+#Numero di punti
+10
+#Nt
+20
+#Lside
+35000.89
+#Rside
+1000.89
+# Trash = indica quanti punti butto nei miei dati
+1
+# sigma
+0.0875
+#apar
+1.999
+HIDDEN
+@
+@
+@
+@RETICOLO LS48NT16
+#Ls
+48
+#Numero di punti
+8
+#Nt
+16
+#Lside
+302000.89
+#Rside
+800.89 
+# Trash = indica quanti punti butto nei miei dati
+1
+# sigma
+0.109375
+#apar
+1.999
+@
+@
+@
+HIDDEN
+@RETICOLO LS36NT12
+#Ls
+36
+#Numero di punti
+6
+#Nt
+12
+#Lside
+500.0
+#Rside
+20.89
+# Trash = indica quanti punti butto nei miei dati
+1
+# sigma
+0.145833333333333
+#apar
+1.999
+HIDDEN
