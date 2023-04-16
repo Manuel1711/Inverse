@@ -1,10 +1,17 @@
 //////////////////////////////
-//PARAMETRI DEL CALCOLO
+
+//In this header file, the quantities needed are defined
+//The input file and the parameters are read and defined.
+
+//Parameters
 int Nt, S(0.), NCool(20.), beta, trash(0.);
 double Estar;
 double dLim(0.), uLim(0.), apar(0.);
 Real sigma;
-// 
+
+
+
+//Reading of the input file parameters and assignation
 void parameters(int argc, char *argv[]){
   while( argc > 1 ) {
     
@@ -50,7 +57,7 @@ void parameters(int argc, char *argv[]){
 
 
 
-
+//Other useful quantities
 static Real E0=0.0; 
 static const Real alpha=0; 
 //static const Real lambda=0.9999999;
@@ -61,7 +68,7 @@ int EO = 2;
 
 string ens;
 
-//Quantità globali
+//Global quantities
 PrecVec lambda(1000);
 Real lambda1, lambda2;
 int ilambda1, ilambda2;
