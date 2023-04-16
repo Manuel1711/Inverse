@@ -12,7 +12,8 @@ PATH=$PATH:/Users/manuel/Documents/GitHub/Conducibility/Programmi/
 # This is a bash script that allows to solve inverse problems changing
 #different parameters, such as the basis, the method and the simulation
 #parameters. In the following everything is commented so you can
-#easily re-use the code.
+#easily re-use the code. This code takes inputs by inputfile.txt.
+#So please change it.
 
 
 
