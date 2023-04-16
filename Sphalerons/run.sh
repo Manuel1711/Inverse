@@ -137,3 +137,4 @@ anche NBoot
 ./Smearing_Func L1 S36 N6 B12 O0 D10.92 U1.89
 done
 EOF
+#A
