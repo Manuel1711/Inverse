@@ -5,6 +5,9 @@
 #include <eigen3/Eigen/Dense>
 #include <vector>
     
+//Header file defining arbitrary multiple precision variables
+//It uses C++ libraries eigen and boost
+
 #define Pi 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
 using namespace std;
