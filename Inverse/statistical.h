@@ -2,6 +2,9 @@
 #define _MP_H
 #endif
 
+//Statistical libraty to make the bootstrap analysis
+
+
 Real Boot_Mean(Real Boot[], int Nboot){
   Real Mean=0;
   for(int iboot=0; iboot<Nboot; iboot++)

@@ -11,20 +11,23 @@ using namespace std;
 using namespace Eigen;
 //using T=mpfr_class;
 
-
+//Import of the boost multiprecision libraries
 namespace bm=boost::multiprecision;
 namespace bq=boost::math::quadrature;
 
+//Define of a arbitrary precise variable Real
 using Real=
   bm::number<bm::mpfr_float_backend<1024>>;
 const Real inf=
   std::numeric_limits<Real>::infinity();
 
-
+//Using the eigen library, define arbitrary precise
+//matrix and vectors
 using PrecMatr= Matrix<Real,Dynamic,Dynamic>;
 using PrecVec = Matrix<Real,Dynamic, 1>;
 
 
+//Functions for printing as a string the Real variable
 string conv(const Real& in)
 {
   ostringstream os;

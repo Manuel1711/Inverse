@@ -5,11 +5,11 @@
  
 
 
-// DEFINIZIONE FUNZIONI DEL METODO
+// DEFINITIONS OF THE FUNCTIONS USED FOR THE RESOLUTION METHOD
 
 
 
-//Target
+//Target function
 Real Z( Real s, Real Es){
   return (1+erf(Es/(sqrt(2)*s)))/2;
 }
@@ -19,7 +19,7 @@ Real Target_F(Real E, Real Es, Real s){
 }
 
 
-//Base
+//Basis function
 Real K(Real omega, Real t, Real beta){
   Real ret;
 #if defined(EXP)
@@ -40,7 +40,7 @@ Real K(Real omega, Real t, Real beta){
 }
 
 
-//Funzione di smearing
+//Smearing function
 Real Delta_Smear(Real omega, PrecVec q, Real t_in[]){  
   Real D;
   for(int i=0; i<Nt; i++){
@@ -50,6 +50,7 @@ Real Delta_Smear(Real omega, PrecVec q, Real t_in[]){
   return D; 
 }
 
+//Target funct integral
 Real Target_Int(double ap){
   const auto f_cs=
     [=](const Real& E) -> Real
@@ -61,7 +62,7 @@ Real Target_Int(double ap){
 
 
 
-//Coefficienti
+//Coefficients computation
 PrecVec Coeff(PrecVec R, PrecMatr Winv, PrecVec f, Real l){
   Real den =  R.transpose()*Winv*R;
 #if defined(HLN)
@@ -75,7 +76,7 @@ PrecVec Coeff(PrecVec R, PrecMatr Winv, PrecVec f, Real l){
 }
 
 
-//Funzione spettrale
+//Spectral function from coefficients
 Real spectral(PrecVec q, PrecVec C){
   Real rho=0;
   for(int i=0; i<Nt; i++){
@@ -85,7 +86,7 @@ Real spectral(PrecVec q, PrecVec C){
 }
 
 
-//Incertezza statistica naive
+//Naive statistical uncertainty
 Real stat_unc(PrecVec q, PrecVec dC){
   Real err=0;
   for(int i=0; i<Nt; i++){
@@ -99,9 +100,9 @@ Real stat_unc(PrecVec q, PrecVec dC){
 
 
 
-// OUTPUT UTILI
+// USEFUL OUTPUT FUNCTIONS
 
-//Output funzione di smearing
+//Output Smearing function
 void Smear_output(char open_Delta_S[], double Estar, Real t_a[], PrecVec g){
 
   FILE *Delta_S;
@@ -141,16 +142,18 @@ void Smear_output(char open_Delta_S[], double Estar, Real t_a[], PrecVec g){
 
 
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// Computation A, R, f (Independent from \lambda and correlators)
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-// CALCOLO A, R, f (INDIPENDENTI DA LAMBDA E CORRELATORI)
 
-//Calcolo A
+//Computation A
 PrecMatr A_Comp(Real t_a[], double Estar, double ap){
   PrecMatr A(Nt,Nt);
   for(int i=0; i<Nt; i++){
     for(int j=0; j<Nt; j++){
 
-      //Con base exp espressione esatta
+      //With exp basis 
 #if defined(EXP)
 #if defined(HLN)
       A(i,j) = exp(-(ti+tj-alpha)*E0)/(ti+tj-alpha);
@@ -160,7 +163,7 @@ PrecMatr A_Comp(Real t_a[], double Estar, double ap){
 #endif      
 #endif
 
-      //Con base coseno integro
+      //With cos basis integrate
 #if defined(COS) || (COS_SPHAL)
       const auto f_cs=
 	[=](const Real& E) -> Real
@@ -181,7 +184,7 @@ PrecMatr A_Comp(Real t_a[], double Estar, double ap){
   return A;
 } 
 
-//Calcolo R
+//Computation R
 PrecVec R_Comp(Real t_a[]){
   PrecVec R(Nt);
   for(int i=0; i<Nt; i++){
@@ -208,7 +211,7 @@ PrecVec R_Comp(Real t_a[]){
 }
 
 
-//Calcolo f
+//Computation f
 Real f_NInt(Real infLimit, Real supLimit, Real ti, Real s, Real Es, double ap){
   const auto f_cs=
     [=](const Real& E) -> Real
@@ -246,18 +249,18 @@ PrecVec f_func(Real t_a[], Real s, Real Es, double ap){
  
 
 
-//Calcolo di W e coefficienti
+//Computation W e coefficients
 PrecVec g_comp(Real lambda, PrecMatr A, PrecMatr Cov, PrecVec f, PrecVec R, Real Corr0){
   PrecMatr W_Mat(Nt,Nt);
   W_Mat = (1-lambda)*A + lambda*Cov/(pow(Corr0,2));
-  //Inversione matrice W
+  //Inversion matrix W
   const auto Winv=W_Mat.inverse();
-  //Calcolo g
+  //Computation g
   return Coeff(R,Winv,f,lambda);
 }
 
 
-//Calcolo funzionale a posteriori (coefficienti globali)
+//Computation functional a posteriori (global coefficients)
 Real W_func_comp(Real lambda, Real Corr_zero, PrecMatr Cov, double Estar, PrecVec g, double ap, PrecMatr A, PrecVec f){
   Real A1=g.transpose()*A*g;
   Real A2=-2*f.transpose()*g;
