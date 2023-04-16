@@ -13,14 +13,21 @@ PATH=$PATH:/Users/manuel/Documents/GitHub/Conducibility/Programmi/
 
 optimization="0 -g"
 
-
+#Choice of the method you want to use.
+#If 0 -> Regular
+#If 1 -> Modified
 #method
 boolM=1
+
+
+#Choice of the basis function
+#If 0 exp
+#If 1 cosh
 #basis
 boolB=1
 #declared="-D ABAB"
  
-
+#Define Method 
 if [ $boolM -eq 0 ]
 then
     Method="-D BG"
@@ -32,6 +39,7 @@ then
 fi
 
 
+#Define Basis
 if [ $boolB -eq 0 ]
 then
     Basis="-D EXP"
@@ -47,28 +55,30 @@ then
     Basis="-D COS_SPHAL"
 fi
 
+
+#Reading of the input file
 reading="0"
 parameters=()
 par_name=( "Ls" "#Punti" "Nt" "Lside" "Rside" "Trash" "Sigma" "Apar")
 filename=inputfile.txt
 while read line; do
     if [[ "$line" == *"HIDDEN"* ]]; then
-        # Se la variabile è già impostata su "1", la reimposta su "0"
+        # If the variable is already "1", It puts it equal to "0"
         if [[ "$reading" == "1" ]]; then
             reading="0"
-        # Altrimenti, imposta la variabile su "1"
+        # Differently it puts it equal to "1"
         else
             reading="1"
         fi
-        # Salta alla prossima riga
+        #Jumps to the next row
         continue
     fi
     if [[ "$reading" == "0" ]]; then
-    # Salta le righe che iniziano con #
+    # Jumps the rows that start with #
 	if grep -Eq '^#|@' <<< "$line"; then
             continue
 	fi
-	# Estrae solo i numeri da ogni riga e li stampa
+	# Extract only the numbers and it prints them
 	number=$(echo "$line" | grep -Eo '[0-9]+(\.[0-9]+)?')
 	parameters+=("$number")
     fi
@@ -79,6 +89,8 @@ for (( i=0; i<${#par_name[@]}; i++ )); do
     echo "${par_name[i]}=${parameters[i]}"
 done
 
+
+#Compile with all the libraries
 g++ -O$optimization -std=c++14 -o Smearing_Func Smearing_Func.C -I/Users/manuel/Desktop/gmpfrxx  -L/Users/manuel/Desktop/gmpfrxx -I/usr/local/include -L/usr/local/include  -lgmpfrxx -lmpfr -lgmpxx -lgmp -lm -lgsl  -lgslcblas -I/Users/manuel/Documents/GitHub/Inverse -L/Users/manuel/Documents/GitHub/Inverse  $Method $Basis $N
 
 
@@ -111,6 +123,8 @@ fi
 EOF
 
 echo Output/Alpha/Ns${parameters[0]}_Nt${parameters[2]}/Output_ens.txt
+
+#Lunch the program making a cycle on the parameter of cooling
 for i in {4..8}
 do
 ./Smearing_Func S${parameters[0]} N${parameters[1]} B${parameters[2]} D${parameters[3]} U${parameters[4]} T${parameters[5]} E${parameters[6]} A${parameters[7]} L$i O0
