@@ -9,7 +9,12 @@ PATH=$PATH:/Users/manuel/Documents/GitHub/Conducibility/Programmi/
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#
 
 
-#@@@ COMPLILAZIONE Spectral_gsl.C @@@#
+# This is a bash script that allows to solve inverse problems changing
+#different parameters, such as the basis, the method and the simulation
+#parameters. In the following everything is commented so you can
+#easily re-use the code.
+
+
 
 optimization="0 -g"
 
