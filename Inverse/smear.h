@@ -1,5 +1,5 @@
 //#include "pars.h"
-#include "/Users/manuel/Documents/GitHub/Sphelareons/Programmi/pars_sphal.h"
+#include "/Users/manuel/Documents/GitHub/Sphalerons/pars_sphal.h"
 #include "statistical.h"
  
  
@@ -320,9 +320,9 @@ void Print_Study_Lambda(PrecVec Dens_Mu, PrecVec Dens_S, Real Corr_Z, PrecMatr C
   FILE *Lambda_Shape_out, *Lambda_A;
   char open_Lambda_Shape_out[1024], open_Lambda_A[1024];
   sprintf(open_Lambda_A, "Output/Lambda_A.out");
-  //if(trash == 0) sprintf(open_Lambda_Shape_out, "Output/Lambda_Kotov.out");
-  if(trash == 0) sprintf(open_Lambda_Shape_out, "Output/Lambda_Double.out");
-  else sprintf(open_Lambda_Shape_out, "Output/Alpha/Ns%d_Nt%d/N_Cool_%d/Lambda_ShapeD%lfU%lf_%lf.out", S, beta, NCool, dLim, uLim, Estar);
+  sprintf(open_Lambda_Shape_out, "Output/Lambda_Kotov.out");
+  //if(trash == 0) sprintf(open_Lambda_Shape_out, "Output/Lambda_Double.out");
+  //else sprintf(open_Lambda_Shape_out, "Output/Alpha/Ns%d_Nt%d/N_Cool_%d/Lambda_ShapeD%lfU%lf_%lf.out", S, beta, NCool, dLim, uLim, Estar);
   if ((Lambda_Shape_out = fopen(open_Lambda_Shape_out, "w")) == NULL ){
     printf("Error opening the input file: %s\n",open_Lambda_Shape_out);
     exit(EXIT_FAILURE);
