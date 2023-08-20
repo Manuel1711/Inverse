@@ -97,7 +97,7 @@ done
 
 
 #Compile with all the libraries
-g++ -O$optimization -std=c++14 -o Smearing_Func Smearing_Func.C -I/Users/manuel/Desktop/gmpfrxx  -L/Users/manuel/Desktop/gmpfrxx -I/usr/local/include -L/usr/local/include  -lgmpfrxx -lmpfr -lgmpxx -lgmp -lm -lgsl  -lgslcblas -I/Users/manuel/Documents/GitHub/Inverse -L/Users/manuel/Documents/GitHub/Inverse  $Method $Basis $N
+g++ -O$optimization -std=c++14 -o Smearing_Func Smearing_Func.C -I/Users/manuel/Desktop/gmpfrxx  -L/Users/manuel/Desktop/gmpfrxx -I/usr/local/include -L/usr/local/include  -lgmpfrxx -lmpfr -lgmpxx -lgmp -lm -lgsl  -lgslcblas -I/Users/manuel/Documents/GitHub/Inverse -L/Users/manuel/Documents/GitHub/Inverse $Method $Basis $N
 
 
 
@@ -130,12 +130,30 @@ EOF
 
 echo Output/Alpha/Ns${parameters[0]}_Nt${parameters[2]}/Output_ens.txt
 
-#Lunch the program making a cycle on the parameter of cooling
-for i in {4..8}
-do
-./Smearing_Func S${parameters[0]} N${parameters[1]} B${parameters[2]} D${parameters[3]} U${parameters[4]} T${parameters[5]} E${parameters[6]} A${parameters[7]} L$i O0
-done
+if [[ "${parameters[2]}" == "12" ]]; then
+    sigma=(0.125 0.1333333333 0.1416666666666667 0.145833333333333 0.15 0.1583333333333333 0.1666666666666667 0.175 0.2083333333333333 0.25 0.2916666666666667 0.3333333333333333 0.375) 
+elif [[ "${parameters[2]}" == "10" ]]; then
+    sigma=(0.15 0.16 0.17 0.175 0.18 0.19 0.2 0.21 0.25 0.3 0.35 0.4 0.45) 
+elif [[ "${parameters[2]}" == "14" ]]; then
+    sigma=(0.1071428 0.1142857 0.12142857 0.125 0.12857 0.1357 0.142857 0.15 0.178571428 0.2142857 0.25 0.2857142857 0.32142857)
+elif [[ "${parameters[2]}" == "16" ]]; then
+    sigma=(0.09375 0.1 0.10625 0.109375 0.1125 0.11875 0.125 0.13125 0.15625 0.1875 0.21875 0.25 0.28125)  
+elif [[ "${parameters[2]}" == "8" ]]; then
+    sigma=(0.1875 0.2 0.2125 0.21875 0.225 0.2375 0.25 0.2625 0.3125 0.375 0.4375 0.5 0.625)
+elif [[ "${parameters[2]}" == "1" ]]; then
+    sigma=(1.5 1.6 1.7 1.75 1.8 1.9 2 2.1 2.5 3 3.5 4 4.5) 
+fi
 
+##Lunch the program making a cycle on the parameter of cooling
+for i in {7..7}
+#for ((i=6; i<=10; i+=2))
+do
+for j in {0..12}
+do
+./Smearing_Func S${parameters[0]} N${parameters[1]} B${parameters[2]} D${parameters[3]} U${parameters[4]} T${parameters[5]} E${sigma[j]} A${parameters[7]} L$i O0
+done
+done
+ 
 :<<EOF
 anche NBoot
 ./Smearing_Func L18 S60 N10 B20 O0 D35000.89 U1000.89 T1
