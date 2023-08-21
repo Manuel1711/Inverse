@@ -10,16 +10,28 @@
 
 int main(int argc, char *argv[]){
   parameters(argc, argv);
-  cout << "********* " << Estar  << " *********" << endl;
-  cout << "L: " << S << " #Points: " << Nt <<  " Nt: " << beta << " dLim: " << dLim << " uLim: " << uLim << " trash: " << trash << " sigma: " << sigma << " NCool: " << NCool << " Estar: " << Estar << "apar:" << apar << endl;
   
-  Real t[Nt];
-  //Valori tau
-  for(int i=1; i<=Nt; i++){
-    //t[i-1] = 0.2 + (i-1)*0.05;
-    t[i-1] = i;
-    cout << "t: " << t[i-1] << endl;
+
+  Real t[Nt]; 
+  if(Par=="even"){
+    trash=1;
+    for(int i=1; i<=Nt; i++){
+      t[i-1] = 2*i;
+      cout << "t: " << t[i-1] << endl;
+    }
   }
+  else if(Par=="odd"){
+    trash = 0;
+    for(int i=0; i<Nt; i++){
+      t[i] = 2*i+1;
+      cout << "t: " << t[i] << endl;
+    }
+  }
+  
+  
+  cout << "********* " << Estar  << " *********" << endl;
+  cout << "Magnetic Field=" << MF << " Parità=" << Par << " Direzione=" << Dir << endl; 
+  cout << "L: " << S << " #Points: " << Nt <<  " Nt: " << beta << " dLim: " << dLim << " uLim: " << uLim << " trash: " << trash << " sigma: " << sigma << " NCool: " << NCool << " Estar: " << Estar << "apar:" << apar << endl;
   
   //Real t[6] = {0.25, 0.3, 0.35, 0.4, 0.45, 0.5};
   
@@ -32,7 +44,7 @@ int main(int argc, char *argv[]){
     else if(ilambda >= 70 and ilambda < 90) lambda(ilambda) = conv(to_string(ilambda-69))/100000;
     else if(ilambda >=90 and ilambda <110) lambda(ilambda) = conv(to_string(ilambda-89))/10000;
     else if(ilambda>=110 and ilambda<140) lambda(ilambda) = conv(to_string(ilambda-109))/10000;
-    else if(ilambda>=200 and ilambda < 300) lambda(ilambda) = 0.1 + conv(to_string(ilambda-199))/100; 
+    //else if(ilambda>=200 and ilambda < 300) lambda(ilambda) = 0.1 + conv(to_string(ilambda-199))/100; 
     
   }
   
@@ -41,10 +53,10 @@ int main(int argc, char *argv[]){
   //Mean and Sigma Values
   FILE *Input_Corr_M;
   char open_Input_Corr_M[1024];
-  //sprintf(open_Input_Corr_M, "Kotov_results.dat");
+  sprintf(open_Input_Corr_M, "/Users/manuel/Documents/GitHub/Magnetic/T%dL%d_beta4.14_b%d/Mean_%s_%s.dat",beta,S,MF,Dir.c_str(),Par.c_str());
   //sprintf(open_Input_Corr_M, "Mean_Double.dat");
   //sprintf(open_Input_Corr_M, "/Users/manuel/Documents/GitHub/Sphalerons/bootstrap_tcorr_pureYM_L_%d_T_%d/Mean_topcharge_tcorr_ncool_%d.dat", S, beta, NCool);
-  sprintf(open_Input_Corr_M, "/Users/manuel/Documents/GitHub/Sphalerons/corrs_bootstrap_quenched_Nt_%d/Mean_%d.dat", beta, NCool);
+  //sprintf(open_Input_Corr_M, "/Users/manuel/Documents/GitHub/Sphalerons/corrs_bootstrap_quenched_Nt_%d/Mean_%d.dat", beta, NCool);
   //sprintf(open_Input_Corr_M, "/Users/manuel/Documents/GitHub/Sphalerons/Referee/tcorr_contlimit_ncool_%d_MEAN.dat", NCool);
   //sprintf(open_Input_Corr_M, "T_300_MeV/L%d_T%d_b4.263/Mean_%d.dat", S, beta, NCool);
   if ((Input_Corr_M = fopen(open_Input_Corr_M, "r")) == NULL ){
@@ -60,7 +72,7 @@ int main(int argc, char *argv[]){
     fscanf(Input_Corr_M, "%lf" "%s" "%s", &a, App3, App4);
     Corr_Mu(i) = conv(App3);
     Corr_err(i) = conv(App4);
-    cout << "i: " << i << endl;
+    cout << "i: " << i << endl; 
     cout << "KKK " << a << " " << Corr_Mu(i) << "  " <<  Corr_err(i) << endl;
   }
   fclose(Input_Corr_M);
@@ -101,7 +113,7 @@ int main(int argc, char *argv[]){
   char open_Delta_S[1024], open_Diff[1024];
   //sprintf(open_Delta_S, "T_300_MeV/L%d_T%d_b4.263/Output/Delta_Smear%d_%s", S, beta, NCool, conv(sigma).c_str());
   //sprintf(open_Delta_S, "/Users/manuel/Documents/GitHub/Sphalerons/Referee/Output/Delta_Smear%d_%s", NCool, conv(sigma).c_str());
-  sprintf(open_Delta_S, "/Users/manuel/Documents/GitHub/Sphalerons/corrs_bootstrap_quenched_Nt_%d/Output/Delta_Smear%d_%s", beta, NCool, conv(sigma).c_str());
+  sprintf(open_Delta_S, "/Users/manuel/Documents/GitHub/Magnetic/T%dL%d_beta4.14_b%d/Output/DeltaS_%s_%s.txt",beta,S,MF,Dir.c_str(),Par.c_str());
   Smear_output(open_Delta_S, Estar, t, gl.row(0));
 
   Real Ver;
@@ -121,10 +133,10 @@ int main(int argc, char *argv[]){
   //BOOTSTRAP
   FILE *Input_Corrs;
   char open_Input_Corrs[1024];
-  //sprintf(open_Input_Corrs, "data.txt");
+  sprintf(open_Input_Corrs, "/Users/manuel/Documents/GitHub/Magnetic/T%dL%d_beta4.14_b%d/sub_%s_%s.txt",beta,S,MF,Dir.c_str(),Par.c_str());
   //sprintf(open_Input_Corrs, "final_corr_BOOTSTRAP_SAMPLES.dat"); 
   //sprintf(open_Input_Corrs, "/Users/manuel/Documents/GitHub/Sphalerons/bootstrap_tcorr_pureYM_L_%d_T_%d/bootstrap_topcharge_tcorr_ncool_%d.dat", S, beta, NCool);
-  sprintf(open_Input_Corrs,"/Users/manuel/Documents/GitHub/Sphalerons/corrs_bootstrap_quenched_Nt_14/bootstrap_topcharge_tcorr_ncool_%d.dat", NCool);
+  //sprintf(open_Input_Corrs,"/Users/manuel/Documents/GitHub/Sphalerons/corrs_bootstrap_quenched_Nt_14/bootstrap_topcharge_tcorr_ncool_%d.dat", NCool);
   //sprintf(open_Input_Corrs, "T_300_MeV/L%d_T%d_b4.263/correlator_bootstrap_ncool_%d", S, beta, NCool);
   //sprintf(open_Input_Corrs, "/Users/manuel/Documents/GitHub/Sphalerons/Referee/tcorr_contlimit_ncool_%d_BOOTSTRAP.dat", NCool);
   //sprintf(open_Input_Corrs, "final_corr_BOOTSTRAP_SAMPLES.dat");
@@ -164,10 +176,12 @@ int main(int argc, char *argv[]){
   
   
   for(int ilambda=0; ilambda<Nlambda; ilambda++){
-    Dens_Mu(ilambda) = 2*Pi*Boot_Mean(Dens.col(ilambda), Nboot)/(beta*beta);
-    Dens_S(ilambda) = 2*Pi*Boot_Sigma(Dens.col(ilambda), Nboot)/(beta*beta);
+    //Dens_Mu(ilambda) = 2*Pi*Boot_Mean(Dens.col(ilambda), Nboot)/(beta*beta);
+    //Dens_S(ilambda) = 2*Pi*Boot_Sigma(Dens.col(ilambda), Nboot)/(beta*beta);
+    Dens_Mu(ilambda) = Pi*Boot_Mean(Dens.col(ilambda), Nboot);
+    Dens_S(ilambda) = Pi*Boot_Sigma(Dens.col(ilambda), Nboot);
   }
-
+ 
   cout << "QUI" << endl;
   Residual_Study(Corr_Mu(0), Cov, Estar, gl, t, f, A);
   
@@ -177,28 +191,26 @@ int main(int argc, char *argv[]){
   ofstream file;
   char fout[1024];
   //sprintf(fout,"Output/Double.out");
-  cout << "II " << endl;
   //sprintf(fout,"Output/Alpha/Ns%d_Nt%d/Output_ens.txt", S, beta);
   //sprintf(fout, "T_570_MeV/L%d_T%d_b4.592/Output/Output_ens.txt", S, beta);
   //sprintf(fout, "T_300_MeV/L%d_T%d_b4.263/Output/Output_ens_sigma_%d.txt", S, beta, NCool);
   //sprintf(fout, "/Users/manuel/Documents/GitHub/Sphalerons/Referee/Output/Output_ens_sigma_%d.txt", NCool);
   cout << "fout: " << fout << endl;
   //sprintf(fout, "Output_ens_Double.txt");
-  sprintf(fout, "corrs_bootstrap_quenched_Nt_%d/Output/Output_ens_NCool%d.txt", beta, NCool);     
+  sprintf(fout, "/Users/manuel/Documents/GitHub/Magnetic/T%dL%d_beta4.14_b%d/Output/Output_ens_sigma_%s_%s.txt",beta,S,MF,Dir.c_str(),Par.c_str());     
   file.open(fout, std::ios::app); 
   if (!file.is_open()) {
     std::cerr << "Errore: non è stato possibile aprire il file." << std::endl;
     return 1;
   }
-  cout << "AAA " << endl;
   //file << NCool << "  " << Dens_Mu(ilambda2) << "  " << SigmaF << endl;
   file << sigma << "  " << Dens_Mu(ilambda2) << "  " << SigmaF << endl;
   //file << Estar << "  " << Dens_Mu(ilambda2) << "  " << SigmaF << endl;
   file.close();
 
   Print_Study_Lambda(Dens_Mu, Dens_S, Corr_Mu(0), Cov, Estar, gl, t, SigmaF);    
+
   
- 
   
   
   return 0;
