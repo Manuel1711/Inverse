@@ -177,7 +177,7 @@ PrecMatr A_Comp(Real t_a[], double Estar, double ap){
 	};
       A(i,j) = bq::gauss_kronrod<Real,61>::integrate(f_cs,infLimit,supLimit,5,1e-16);
 #endif
-      
+       
     }//j
   }//i
   cout << "A: " << A << endl;
@@ -295,7 +295,7 @@ void Residual_Study(Real Corr_Z, PrecMatr Cov, double Estar, PrecMatr gl, Real t
       ilambda2=ilambda;
       a++;
     }
-    //cout << " ilambda : " << ilambda << endl;
+    cout << " ilambda : " << ilambda << endl;
   }
 
   cout << "PPP: " << lambda1 << "  " << lambda2 << endl;
@@ -317,21 +317,17 @@ void Print_Study_Lambda(PrecVec Dens_Mu, PrecVec Dens_S, Real Corr_Z, PrecMatr C
   
   
   //File di output e bin in lambda
-  FILE *Lambda_Shape_out, *Lambda_A;
-  char open_Lambda_Shape_out[1024], open_Lambda_A[1024];
-  sprintf(open_Lambda_A, "Output/Lambda_A.out");
-  sprintf(open_Lambda_Shape_out, "Output/Lambda_Kotov.out");
-  //if(trash == 0) sprintf(open_Lambda_Shape_out, "Output/Lambda_Double.out");
-  //else sprintf(open_Lambda_Shape_out, "Output/Alpha/Ns%d_Nt%d/N_Cool_%d/Lambda_ShapeD%lfU%lf_%lf.out", S, beta, NCool, dLim, uLim, Estar);
+  FILE *Lambda_Shape_out;
+  char open_Lambda_Shape_out[1024]; 
+  //sprintf(open_Lambda_Shape_out, "T_300_MeV/L%d_T%d_b4.263/Output/correlator_bootstrap_ncool%d_S%s", S, beta, NCool, conv(sigma).c_str());
+  //sprintf(open_Lambda_Shape_out, "/Users/manuel/Documents/GitHub/Sphalerons/Referee/Output/correlator_bootstrap_ncool%d_S%s", NCool,conv(sigma).c_str());
+  //sprintf(open_Lambda_Shape_out, "/Users/manuel/Documents/GitHub/Sphalerons/Output/Alpha/Ns%d_Nt%d/N_Cool_%d/Lambda_ShapeD%dU%d_%s.out",S,beta,NCool,ilambda1, ilambda2, conv(sigma).c_str()); 
+  sprintf(open_Lambda_Shape_out, "/Users/manuel/Documents/GitHub/Magnetic/T%dL%d_beta4.14_b%d/Output/Lambda_Shape_%s_%s_S%s.txt",beta,S,MF,Dir.c_str(),Par.c_str(),conv(sigma).c_str());    
   if ((Lambda_Shape_out = fopen(open_Lambda_Shape_out, "w")) == NULL ){
     printf("Error opening the input file: %s\n",open_Lambda_Shape_out);
     exit(EXIT_FAILURE);
     fprintf(Lambda_Shape_out, "@target G0.S0\n@type xydy\n");
   }
-  if ((Lambda_A = fopen(open_Lambda_A, "w")) == NULL ){
-    printf("Error opening the input file: %s\n",open_Lambda_A);
-    exit(EXIT_FAILURE);
-  } 
   
   //Output rho in funzione di lambda
   PrecMatr A0 = A_Comp(t, Estar, 0);
@@ -342,21 +338,20 @@ void Print_Study_Lambda(PrecVec Dens_Mu, PrecVec Dens_S, Real Corr_Z, PrecMatr C
 
 
     cout << "OOO: " << lambda(ilambda) << "  " << sqrt(W_func_comp(0,Corr_Z, Cov, Estar, gl.row(ilambda), 0, A0, f0)/Target_Int(0)) << endl;
-    
+
     fprintf(Lambda_Shape_out, "%s " "%s " "%s\n", conv(sqrt(W_func_comp(0,Corr_Z, Cov, Estar, gl.row(ilambda), 0, A0, f0)/Target_Int(0))).c_str(), conv(Dens_Mu(ilambda)).c_str(), conv(Dens_S(ilambda)).c_str());
-    //fprintf(Lambda_A, "%s " "%s\n", conv(lambda).c_str(), conv(W_func_comp(0,Corr_zero,Cov,Estar,TSq)).c_str());
+    //fprintf(Lambda_Shape_out, "%s " "%s " "%s\n", conv(lambda(ilambda)).c_str(), conv(Dens_Mu(ilambda)).c_str(), conv(Dens_S(ilambda)).c_str());
   }//lambda
-  
   char eo;
   if(EO==0) eo='e';
   if(EO==1) eo='o';
   if(EO==2) eo='s';
-
+  
   fprintf(Lambda_Shape_out, "\n & \n");
-  fprintf(Lambda_Shape_out, "%s " "%s " "%s\n & \n", conv(sqrt(W_func_comp(0,Corr_Z, Cov, Estar, gl.row(ilambda1), 0, A0, f0)/Target_Int(0))).c_str(), conv(Dens_Mu(ilambda1)).c_str(), conv(Dens_S(ilambda1)).c_str());
-  fprintf(Lambda_Shape_out, "%s " "%s " "%s\n & \n", conv(sqrt(W_func_comp(0,Corr_Z, Cov, Estar, gl.row(ilambda2), 0, A0, f0)/Target_Int(0))).c_str(), conv(Dens_Mu(ilambda2)).c_str(), conv(Dens_S(ilambda2)).c_str());
-  fprintf(Lambda_Shape_out, "%s " "%s " "%s\n & \n", conv(sqrt(W_func_comp(0,Corr_Z, Cov, Estar, gl.row(ilambda2), 0, A0, f0)/Target_Int(0))).c_str(), conv(Dens_Mu(ilambda2)).c_str(), conv(SigmaF).c_str());
-
+  fprintf(Lambda_Shape_out, "%s " "%s " "%s\n & \n", conv(sqrt(W_func_comp(0,Corr_Z, Cov, Estar, gl.row(4), 0, A0, f0)/Target_Int(0))).c_str(), conv(Dens_Mu(4)).c_str(), conv(Dens_S(4)).c_str());
+  fprintf(Lambda_Shape_out, "%s " "%s " "%s\n & \n", conv(sqrt(W_func_comp(0,Corr_Z, Cov, Estar, gl.row(75), 0, A0, f0)/Target_Int(0))).c_str(), conv(Dens_Mu(75)).c_str(), conv(Dens_S(75)).c_str());
+  fprintf(Lambda_Shape_out, "%s " "%s " "%s\n & \n", conv(sqrt(W_func_comp(0,Corr_Z, Cov, Estar, gl.row(75), 0, A0, f0)/Target_Int(0))).c_str(), conv(Dens_Mu(75)).c_str(), conv(SigmaF).c_str());
+ 
   //fprintf(Lambda_Shape_out, "%s  %s\n%s  %s\n", conv(Max_Lambda).c_str(), conv(-rho_m_max-rho_s_max).c_str(), conv(Max_Lambda).c_str(), conv(2*(rho_m_max+rho_s_max)).c_str());
   //fprintf(Lambda_Shape_out, "&\n@    s1 legend  \"\\xl\\f{}\\smax\\N=%s\"\n", conv(Max_Lambda).c_str());
   fprintf(Lambda_Shape_out, "@    xaxis  label \"d(g)\"\n@    yaxis  label \"-(\\xG\\f{}\\N\\s sphal\\N)/( T\\S4\\N)\"\n");

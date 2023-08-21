@@ -2,22 +2,24 @@
 
 //In this header file, the quantities needed are defined
 //The input file and the parameters are read and defined.
-
+ 
 //Parameters
 int Nt, S(0.), NCool(20.), beta, trash(0.);
 double Estar;
 double dLim(0.), uLim(0.), apar(0.);
 Real sigma;
+int MF;
+string Par, Dir;
 
-
-
+ 
 //Reading of the input file parameters and assignation
 void parameters(int argc, char *argv[]){
   while( argc > 1 ) {
     
     switch(argv[1][0]) {
     case 'L':
-      NCool = atoi( &argv[1][1] );
+      //NCool = atoi( &argv[1][1] );
+      MF = atoi(&argv[1][1]);
       break;
     case 'S':
       S = atoi( &argv[1][1] );
@@ -46,6 +48,12 @@ void parameters(int argc, char *argv[]){
     case 'A':
       apar = atof( &argv[1][1] );
       break;
+    case 'P':
+      Par =  &argv[1][1];
+      break;
+    case 'R':
+      Dir = &argv[1][1];
+      break;
     default:
       cerr << "Unlucky: Retry input values ens\n";
       exit (8);
@@ -61,7 +69,7 @@ void parameters(int argc, char *argv[]){
 static Real E0=0.0; 
 static const Real alpha=0; 
 //static const Real lambda=0.9999999;
-static const int Nboot = 1000, Nlambda=260;
+static const int Nboot = 1000, Nlambda=140;
 static const int Ncool = 1;
 int EO = 2;
 /////////////////////////////////////////                                 
